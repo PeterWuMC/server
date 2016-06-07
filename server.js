@@ -37,7 +37,7 @@ var stats = {
 };
 
 function subdomain_name(hostname, ignore_subdomain) {
-    tldjs.getSubdomain(hostname).replace('.'+ignore_subdomain, '').replace(ignore_subdomain, '')
+    return tldjs.getSubdomain(hostname).replace('.'+ignore_subdomain, '').replace(ignore_subdomain, '');
 }
 
 function maybe_bounce(req, res, sock, head, opt) {
