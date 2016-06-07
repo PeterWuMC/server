@@ -36,14 +36,18 @@ var stats = {
     tunnels: 0
 };
 
-function maybe_bounce(req, res, sock, head) {
+function subdomain_name(hostname, ignore_subdomain) {
+    tldjs.getSubdomain(hostname).replace('.'+ignore_subdomain, '').replace(ignore_subdomain, '')
+}
+
+function maybe_bounce(req, res, sock, head, opt) {
     // without a hostname, we won't know who the request is for
     var hostname = req.headers.host;
     if (!hostname) {
         return false;
     }
 
-    var subdomain = tldjs.getSubdomain(hostname);
+    var subdomain = subdomain_name(hostname, opt.ignore_subdomain);
     if (!subdomain) {
         return false;
     }
@@ -134,7 +138,7 @@ function maybe_bounce(req, res, sock, head) {
         var client_req = http.request(opt, function(client_res) {
             // write response code and headers
             res.writeHead(client_res.statusCode, client_res.headers);
-            
+
             client_res.pipe(res);
             on_finished(client_res, function(err) {
                 done();
@@ -251,7 +255,7 @@ module.exports = function(opt) {
 
     server.on('request', function(req, res) {
         debug('request %s', req.url);
-        if (maybe_bounce(req, res, null, null)) {
+        if (maybe_bounce(req, res, null, null, opt)) {
             return;
         };
 
@@ -259,7 +263,7 @@ module.exports = function(opt) {
     });
 
     server.on('upgrade', function(req, socket, head) {
-        if (maybe_bounce(req, null, socket, head)) {
+        if (maybe_bounce(req, null, socket, head, opt)) {
             return;
         };
 

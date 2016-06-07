@@ -20,6 +20,10 @@ var argv = optimist
         default: 10,
         describe: 'maximum number of tcp sockets each client is allowed to establish at one time (the tunnels)'
     })
+    .options('ignore_subdomain', {
+        default: '',
+        describe: 'the part of the subdomain to be ignored'
+    })
     .argv;
 
 if (argv.help) {
