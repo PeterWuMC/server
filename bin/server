@@ -20,7 +20,7 @@ var argv = optimist
         default: 10,
         describe: 'maximum number of tcp sockets each client is allowed to establish at one time (the tunnels)'
     })
-    .options('ignore_subdomain', {
+    .options('ignore-subdomain', {
         default: '',
         describe: 'the part of the subdomain to be ignored'
     })
@@ -33,7 +33,8 @@ if (argv.help) {
 
 var server = require('../server')({
     max_tcp_sockets: argv['max-sockets'],
-    secure: argv.secure
+    secure: argv.secure,
+    ignore_subdomain: argv['ignore-subdomain']
 });
 
 server.listen(argv.port, function() {

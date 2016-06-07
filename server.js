@@ -48,7 +48,7 @@ function maybe_bounce(req, res, sock, head, opt) {
     }
 
     var subdomain = subdomain_name(hostname, opt.ignore_subdomain);
-    debug subdomain
+
     if (!subdomain) {
         return false;
     }
